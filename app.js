@@ -1,10 +1,10 @@
 const path = require("path");
-
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
-const mongoConnect = require("./util/database").mongoConnect;
+const mongoose = require("mongoose");
 const app = express();
 const User = require("./models/user");
 
@@ -31,6 +31,13 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(() => {
-  app.listen(3000);
-});
+mongoose
+  .connect(
+    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@learning.utikq.mongodb.net/?retryWrites=true&w=majority&appName=learning`
+  )
+  .then((result) => {
+    app.listen(3000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
