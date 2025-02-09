@@ -8,12 +8,25 @@ const userSchema = new Schema({
   cart: {
     items: [
       {
-        productId: { type: Schema.Types.ObjectId },
+        productId: { type: Schema.Types.ObjectId, ref: "Product" },
         quantity: { type: Number, required: true },
       },
     ],
   },
 });
+
+userSchema.methods.addTocart = function () {
+  const cartProduct = this.cart.items.findIndex((cp) => {
+    return cp._id === product._id;
+  });
+  product.quantity = 1;
+  const updatedCart = { items: [product] };
+  const db = getDb();
+  db.collection("users").updateOne(
+    { _id: new mongodb.ObjectId(this._id) },
+    { $set: { cart: updatedCart } }
+  );
+};
 
 // const getDb = require("../util/database").getDb;
 // const mongodb = require("mongodb");
