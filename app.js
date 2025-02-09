@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
+// const mongoConnect = require("./util/database").mongoConnect;
 const mongoose = require("mongoose");
 const app = express();
 const User = require("./models/user");
@@ -36,6 +37,15 @@ mongoose
     `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@learning.utikq.mongodb.net/?retryWrites=true&w=majority&appName=learning`
   )
   .then((result) => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          name: "sabareesan",
+          email: "sabareesanrajkumar05@gmail.com",
+          cart: { items: [] },
+        });
+      }
+    });
     app.listen(3000);
   })
   .catch((err) => {
